@@ -6,17 +6,17 @@ const Navbar = () => {
   // Navigation Links
   const navOptions = (
     <>
-      <li><NavLink to="/" className={({ isActive }) => isActive ? "text-yellow-400 font-bold" : "text-white font-bold"}>HOME</NavLink></li>
-      <li><NavLink to="/contact" className={({ isActive }) => isActive ? "text-yellow-400 font-bold" : "text-white font-bold"}>CONTACT US</NavLink></li>
-      <li><NavLink to="/dashboard" className={({ isActive }) => isActive ? "text-yellow-400 font-bold" : "text-white font-bold"}>DASHBOARD</NavLink></li>
-      <li><NavLink to="/menu" className={({ isActive }) => isActive ? "text-yellow-400 font-bold" : "text-white font-bold"}>OUR MENU</NavLink></li>
-      <li><NavLink to="/shop" className={({ isActive }) => isActive ? "text-yellow-400 font-bold" : "text-white font-bold"}>OUR SHOP</NavLink></li>
+      <li><NavLink to="/" className={({ isActive }) => isActive ? "text-yellow-400 font-bold" : "text-black font-bold"}>HOME</NavLink></li>
+      <li><NavLink to="/contact" className={({ isActive }) => isActive ? "text-yellow-400 font-bold" : "text-black font-bold"}>CONTACT US</NavLink></li>
+      <li><NavLink to="/dashboard" className={({ isActive }) => isActive ? "text-yellow-400 font-bold" : "text-black font-bold"}>DASHBOARD</NavLink></li>
+      <li><NavLink to="/menu" className={({ isActive }) => isActive ? "text-yellow-400 font-bold" : "text-black font-bold"}>OUR MENU</NavLink></li>
+      <li><NavLink to="/shop" className={({ isActive }) => isActive ? "text-yellow-400 font-bold" : "text-black font-bold"}>OUR SHOP</NavLink></li>
     </>
   );
 
   return (
     // Fixed container with max-width and centering for big screens
-    <div className="navbar fixed z-10 bg-black bg-opacity-30 text-white max-w-screen-xl mx-auto left-0 right-0">
+    <div className="navbar fixed z-10 shadow-amber-300 shadow-2xl bg-opacity-30 text-black mx-auto left-0 right-0">
       <div className="navbar-start">
         {/* Mobile Dropdown */}
         <div className="dropdown">
@@ -53,9 +53,10 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* User / Sign Out */}
+        {/* User */}
         <div className="flex items-center gap-2 cursor-pointer hover:text-yellow-400 transition-colors">
-          <span className="font-bold hidden sm:inline uppercase">Sign Out</span>
+          <Link to='/signIn'>
+          <span  className="font-bold hidden sm:inline uppercase">Sign In</span></Link>
           <div className="avatar">
             <div className="w-10 rounded-full border-2 border-white">
               <img src="https://img.icons8.com/ios-filled/50/ffffff/user-male-circle.png" alt="user" />
