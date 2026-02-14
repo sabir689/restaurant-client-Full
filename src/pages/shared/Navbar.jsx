@@ -15,7 +15,7 @@ const Navbar = () => {
   );
 
   return (
-    <div className="navbar fixed z-10 bg-black bg-opacity-30 text-white">
+    <div className="navbar fixed z-10  shadow-2xl bg-opacity-30 text-white">
       <div className="navbar-start">
         {/* Mobile Dropdown */}
         <div className="dropdown">
