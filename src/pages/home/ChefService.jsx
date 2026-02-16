@@ -9,7 +9,7 @@ const ChefService = () => {
         >
             <div className="hero-overlay bg-opacity-30"></div>
             <div className="hero-content text-center text-neutral-content">
-                <div className="max-w-4xl bg-white text-black py-12 px-8 md:px-24 shadow-2xl">
+                <div className="max-w-4xl bg-white/60 text-black py-12 px-8 md:px-24 shadow-2xl">
                     <h2 className="mb-5 text-4xl md:text-5xl font-cinzel uppercase">
                         Bistro Boss
                     </h2>

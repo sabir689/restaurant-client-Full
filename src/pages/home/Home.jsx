@@ -1,5 +1,4 @@
-import React from 'react';
-import Navbar from '../shared/Navbar';
+
 import Banner from './Banner';
 import Category from './Category';
 import ChefService from './ChefService';

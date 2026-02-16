@@ -18,7 +18,7 @@ const AuthLayOut = () => {
             }}
         >
             {/* Main Card Container */}
-            <div className="bg-white/80 backdrop-blur-sm shadow-2xl flex flex-col md:flex-row w-full max-w-5xl mx-4 overflow-hidden rounded-lg border border-gray-200 mb-20 mt-20">
+            <div className="bg-white/80 mt-40 backdrop-blur-sm shadow-2xl flex flex-col md:flex-row w-full max-w-5xl mx-4 overflow-hidden rounded-lg border border-gray-200 mb-20 ">
                 
                 {/* Left Side: Illustration (Fixed to use your import) */}
                 <div className="w-full md:w-1/2 flex items-center justify-center p-8">

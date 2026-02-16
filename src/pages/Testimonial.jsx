@@ -22,7 +22,7 @@ const Testimonials = () => {
 
     useEffect(() => {
         
-        fetch('../../public/reviews.json') 
+        fetch('http://localhost:5000/reviews') 
             .then(res => res.json())
             .then(data => setReviews(data))
             .catch(err => console.error("Error fetching reviews:", err));
