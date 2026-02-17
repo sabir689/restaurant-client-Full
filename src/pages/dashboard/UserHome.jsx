@@ -17,7 +17,7 @@ const UserHome = () => {
     });
 
     return (
-        <div className="w-full min-h-screen  p-4 md:p-10 text-slate-800 ">
+    <div className="w-full min-h-screen  p-4 md:p-10 text-slate-800 ">
             {/* Header Section */}
             <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>

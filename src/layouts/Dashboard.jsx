@@ -83,7 +83,7 @@ const Dashboard = () => {
                             <NavItem to="/dashboard/userHome" icon={FaHome} label="User Home" />
                             <NavItem to="/dashboard/reservation" icon={FaCalendar} label="Reservation" />
                             <NavItem to="/dashboard/cart" icon={FaShoppingCart} label="My Cart" badge={cart?.length} />
-                            <NavItem to="/dashboard/review" icon={FaAd} label="Add Review" />
+                            <NavItem to="/dashboard/addReviews" icon={FaAd} label="Add Review" />
                             <NavItem to="/dashboard/paymentHistory" icon={FaList} label="Payment History" />
                             <NavItem to="/dashboard/myBookings" icon={FaCalendarAlt} label="My Bookings" />
                         </ul>

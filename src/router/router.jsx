@@ -19,6 +19,7 @@ import Reservation from "../pages/dashboard/Reservation";
 import MyBookings from "../pages/dashboard/MyBookings";
 import AdminBookings from "../pages/dashboard/AdminBookings";
 import UserHome from "../pages/dashboard/UserHome";
+import AddReview from "../pages/dashboard/Addreview";
 
 export const router = createBrowserRouter([
   {
@@ -79,6 +80,10 @@ export const router = createBrowserRouter([
       {
         path: 'userHome',
         element: <UserHome></UserHome>
+      },
+      {
+        path: 'addReviews',
+        element: <AddReview></AddReview>
       },
       {
         path: 'addItems',
