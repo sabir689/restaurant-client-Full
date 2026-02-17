@@ -20,6 +20,8 @@ import MyBookings from "../pages/dashboard/MyBookings";
 import AdminBookings from "../pages/dashboard/AdminBookings";
 import UserHome from "../pages/dashboard/UserHome";
 import AddReview from "../pages/dashboard/Addreview";
+import Payment from "../pages/payment/Payment";
+import PaymentHistory from "../pages/payment/PaymentHistory";
 
 export const router = createBrowserRouter([
   {
@@ -67,7 +69,15 @@ export const router = createBrowserRouter([
         path: 'cart',
         element: <Cart />
       },
-      
+      {
+        path: 'payment',
+        element: <Payment />
+      },
+      {
+        path: 'paymentHistory',
+        element: <PaymentHistory />
+      },
+
       // Admin Routes (Available to see for now as requested)
       {
         path: 'users',
@@ -108,7 +118,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'reservation',
-        element: <Reservation></Reservation> 
+        element: <Reservation></Reservation>
       }
     ]
   }

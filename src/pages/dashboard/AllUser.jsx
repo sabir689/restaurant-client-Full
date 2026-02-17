@@ -113,9 +113,19 @@ const AllUsers = () => {
                                 <tr key={user._id} className="hover:bg-gray-50/50 transition-all border-b border-gray-50 last:border-0">
                                     <td className="py-6 px-10">
                                         <div className="flex items-center gap-5">
-                                            <div className="avatar placeholder">
-                                                <div className="bg-gradient-to-tr from-[#D1A054] to-[#f3dbb3] text-white rounded-2xl w-14 shadow-lg shadow-[#D1A054]/20 font-bold text-xl">
-                                                    <span>{user.name.charAt(0)}</span>
+                                            <div className="avatar">
+                                                <div className="bg-gradient-to-tr from-[#D1A054] to-[#f3dbb3] text-white rounded-2xl w-14 shadow-lg shadow-[#D1A054]/20 font-bold text-xl flex items-center justify-center overflow-hidden">
+                                                    {user?.image ? (
+                                                        /* Show Image if it exists */
+                                                        <img
+                                                            src={user.image}
+                                                            alt={user.name}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        /* Fallback to Initial if image is missing */
+                                                        <span>{user?.name?.charAt(0).toUpperCase() || "U"}</span>
+                                                    )}
                                                 </div>
                                             </div>
                                             <div>

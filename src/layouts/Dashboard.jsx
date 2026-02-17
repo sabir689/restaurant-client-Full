@@ -1,6 +1,8 @@
-import { FaAd, FaBook, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch, FaShoppingCart, FaUsers, FaUtensils,FaCalendarAlt, FaChevronRight } from "react-icons/fa";
+import { FaAd, FaBook, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch, FaShoppingCart, FaUsers, FaUtensils, FaCalendarAlt, FaChevronRight } from "react-icons/fa";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import useCart from "../hooks/useCart";
+import useAdmin from "../hooks/useAdmin";
+
 
 
 const NavItem = ({ to, icon: Icon, label, badge }) => (
@@ -16,7 +18,6 @@ const NavItem = ({ to, icon: Icon, label, badge }) => (
             }
         >
             <div className="flex items-center gap-3">
-                {/* Icon must be capitalized to be rendered as a component */}
                 <Icon className="text-lg" />
                 <span className="capitalize tracking-wide">{label}</span>
             </div>
@@ -32,6 +33,9 @@ const NavItem = ({ to, icon: Icon, label, badge }) => (
 
 const Dashboard = () => {
     const [cart] = useCart();
+    
+    // 2. Get the admin status from our custom hook
+    const [isAdmin, isAdminLoading] = useAdmin();
 
     return (
         <div className="flex min-h-screen bg-[#f8fafc]">
@@ -40,32 +44,52 @@ const Dashboard = () => {
                 
                 {/* Brand Identity */}
                 <Link to='/'>
-                <div className="p-8 mb-4">
-                    <div className="border-l-4 border-white pl-4">
-                        <h1 className="text-2xl font-black text-white leading-none tracking-tighter uppercase font-cinzel">
-                            Bistro Boss
-                        </h1>
-                        <p className="text-orange-100 text-xs tracking-[0.3em] font-light mt-1 uppercase">
-                            Restaurant
-                        </p>
+                    <div className="p-8 mb-4">
+                        <div className="border-l-4 border-white pl-4">
+                            <h1 className="text-2xl font-black text-white leading-none tracking-tighter uppercase font-cinzel">
+                                Bistro Boss
+                            </h1>
+                            <p className="text-orange-100 text-xs tracking-[0.3em] font-light mt-1 uppercase">
+                                Restaurant
+                            </p>
+                        </div>
                     </div>
-                </div>
                 </Link>
 
                 <nav className="px-4 pb-10">
-                    {/* ADMIN SECTION */}
-                    <div className="mb-8">
-                        <p className="px-4 text-[10px] font-black text-orange-100 uppercase tracking-[0.2em] mb-4 opacity-70">
-                            Admin Dashboard
-                        </p>
-                        <ul className="space-y-1">
-                            <NavItem to="/dashboard/adminHome" icon={FaHome} label="Admin Home" />
-                            <NavItem to="/dashboard/addItems" icon={FaUtensils} label="Add Items" />
-                            <NavItem to="/dashboard/manageItems" icon={FaList} label="Manage Items" />
-                            <NavItem to="/dashboard/bookings" icon={FaBook} label="Bookings" />
-                            <NavItem to="/dashboard/users" icon={FaUsers} label="All Users" />
-                        </ul>
-                    </div>
+                    {/* 3. CONDITIONAL RENDERING BASED ON ROLE */}
+                    {
+                        isAdmin ? (
+                            /* ADMIN SECTION */
+                            <div className="mb-8">
+                                <p className="px-4 text-[10px] font-black text-orange-100 uppercase tracking-[0.2em] mb-4 opacity-70">
+                                    Admin Dashboard
+                                </p>
+                                <ul className="space-y-1">
+                                    <NavItem to="/dashboard/adminHome" icon={FaHome} label="Admin Home" />
+                                    <NavItem to="/dashboard/addItems" icon={FaUtensils} label="Add Items" />
+                                    <NavItem to="/dashboard/manageItems" icon={FaList} label="Manage Items" />
+                                    <NavItem to="/dashboard/bookings" icon={FaBook} label="Manage Bookings" />
+                                    <NavItem to="/dashboard/users" icon={FaUsers} label="All Users" />
+                                </ul>
+                            </div>
+                        ) : (
+                            /* USER SECTION */
+                            <div className="mb-8">
+                                <p className="px-4 text-[10px] font-black text-orange-100 uppercase tracking-[0.2em] mb-4 opacity-70">
+                                    Guest Menu
+                                </p>
+                                <ul className="space-y-1">
+                                    <NavItem to="/dashboard/userHome" icon={FaHome} label="User Home" />
+                                    <NavItem to="/dashboard/reservation" icon={FaCalendar} label="Reservation" />
+                                    <NavItem to="/dashboard/cart" icon={FaShoppingCart} label="My Cart" badge={cart?.length} />
+                                    <NavItem to="/dashboard/addReviews" icon={FaAd} label="Add Review" />
+                                    <NavItem to="/dashboard/paymentHistory" icon={FaList} label="Payment History" />
+                                    <NavItem to="/dashboard/myBookings" icon={FaCalendarAlt} label="My Bookings" />
+                                </ul>
+                            </div>
+                        )
+                    }
 
                     {/* Styled Divider */}
                     <div className="relative my-8 px-4">
@@ -74,22 +98,7 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* USER SECTION */}
-                    <div className="mb-8">
-                        <p className="px-4 text-[10px] font-black text-orange-100 uppercase tracking-[0.2em] mb-4 opacity-70">
-                            User Menu
-                        </p>
-                        <ul className="space-y-1">
-                            <NavItem to="/dashboard/userHome" icon={FaHome} label="User Home" />
-                            <NavItem to="/dashboard/reservation" icon={FaCalendar} label="Reservation" />
-                            <NavItem to="/dashboard/cart" icon={FaShoppingCart} label="My Cart" badge={cart?.length} />
-                            <NavItem to="/dashboard/addReviews" icon={FaAd} label="Add Review" />
-                            <NavItem to="/dashboard/paymentHistory" icon={FaList} label="Payment History" />
-                            <NavItem to="/dashboard/myBookings" icon={FaCalendarAlt} label="My Bookings" />
-                        </ul>
-                    </div>
-
-                    {/* PUBLIC LINKS */}
+                    {/* PUBLIC LINKS (Shown to both) */}
                     <div className="pt-4 border-t border-orange-400/50 mt-10">
                         <ul className="space-y-1">
                             <NavItem to="/" icon={FaHome} label="Home" />
@@ -104,17 +113,28 @@ const Dashboard = () => {
             <div className="flex-1 flex flex-col">
                 {/* Header Bar */}
                 <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-10 sticky top-0 z-40">
-                    <h2 className="text-gray-400 font-medium uppercase text-sm tracking-widest">Dashboard Overview</h2>
+                    <h2 className="text-gray-400 font-medium uppercase text-sm tracking-widest">
+                        {isAdmin ? "Admin Overview" : "Dashboard Overview"}
+                    </h2>
                     <div className="flex items-center gap-4">
-                         <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold border border-orange-200">
-                             A
+                         <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold border transition-colors ${
+                             isAdmin ? "bg-purple-100 text-purple-600 border-purple-200" : "bg-orange-100 text-orange-600 border-orange-200"
+                         }`}>
+                             {isAdmin ? "ADM" : "GUEST"}
                          </div>
                     </div>
                 </header>
 
                 <main className="p-10">
                     <div className="max-w-6xl mx-auto">
-                        <Outlet />
+                        {/* 4. Show a loading spinner while checking admin status */}
+                        {isAdminLoading ? (
+                            <div className="flex justify-center items-center h-64">
+                                <span className="loading loading-spinner loading-lg text-orange-500"></span>
+                            </div>
+                        ) : (
+                            <Outlet />
+                        )}
                     </div>
                 </main>
             </div>
