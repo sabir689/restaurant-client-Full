@@ -46,7 +46,7 @@ const AddItem = () => {
     };
 
     return (
-        <div className="w-full min-h-screen pb-20 px-4 md:px-10">
+        <div className="w-full min-h-screen pb-20 px-4 md:px-10 text-black">
             {/* --- Unique Header Section --- */}
             <div className="relative pt-10 mb-12 overflow-hidden">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 opacity-5 pointer-events-none">
@@ -78,7 +78,7 @@ const AddItem = () => {
                         {/* Recipe Name */}
                         <div className="form-control w-full">
                             <label className="label">
-                                <span className="label-text font-bold text-gray-700">Recipe name</span>
+                                <span className="label-text font-bold text-gray-700 mb-2">Recipe name</span>
                             </label>
                             <input
                                 type="text"
@@ -92,7 +92,7 @@ const AddItem = () => {
                             {/* Category */}
                             <div className="form-control w-full">
                                 <label className="label">
-                                    <span className="label-text font-bold text-gray-700">Category</span>
+                                    <span className="label-text font-bold text-gray-700 mb-2">Category  </span>
                                 </label>
                                 <select
                                     defaultValue="default"
@@ -111,7 +111,7 @@ const AddItem = () => {
                             {/* Price */}
                             <div className="form-control w-full">
                                 <label className="label">
-                                    <span className="label-text font-bold text-gray-700">Price</span>
+                                    <span className="label-text font-bold text-gray-700 mb-2">Price</span>
                                 </label>
                                 <input
                                     type="number"
@@ -126,7 +126,7 @@ const AddItem = () => {
                         {/* Recipe Details */}
                         <div className="form-control w-full">
                             <label className="label">
-                                <span className="label-text font-bold text-gray-700">Recipe Description</span>
+                                <span className="label-text font-bold text-gray-700 mb-2">Recipe Description</span>
                             </label>
                             <textarea
                                 {...register("recipe", { required: true })}
@@ -138,7 +138,7 @@ const AddItem = () => {
                         {/* File Input */}
                         <div className="form-control w-full">
                             <label className="label">
-                                <span className="label-text font-bold text-gray-700">Upload Image</span>
+                                <span className="label-text font-bold text-gray-700 mr-5">Upload Image</span>
                             </label>
                             <input
                                 {...register("image", { required: true })}

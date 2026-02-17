@@ -15,6 +15,10 @@ import AdminHome from "../pages/dashboard/AdminHome";
 import AddItem from "../pages/dashboard/AddItems";
 import ManageItems from "../pages/dashboard/ManageItems";
 import UpdateItem from "../pages/dashboard/UpdateItem";
+import Reservation from "../pages/dashboard/Reservation";
+import MyBookings from "../pages/dashboard/MyBookings";
+import AdminBookings from "../pages/dashboard/AdminBookings";
+import UserHome from "../pages/dashboard/UserHome";
 
 export const router = createBrowserRouter([
   {
@@ -62,10 +66,7 @@ export const router = createBrowserRouter([
         path: 'cart',
         element: <Cart />
       },
-      {
-        path: 'userHome',
-        element: <div>User Home Content</div> // Replace with your component
-      },
+      
       // Admin Routes (Available to see for now as requested)
       {
         path: 'users',
@@ -74,6 +75,10 @@ export const router = createBrowserRouter([
       {
         path: 'adminHome',
         element: <AdminHome></AdminHome>
+      },
+      {
+        path: 'userHome',
+        element: <UserHome></UserHome>
       },
       {
         path: 'addItems',
@@ -89,8 +94,16 @@ export const router = createBrowserRouter([
         loader: ({ params }) => fetch(`http://localhost:5000/menu/${params.id}`)
       },
       {
+        path: 'myBookings',
+        element: <MyBookings></MyBookings>
+      },
+      {
         path: 'bookings',
-        element: <div>Manage Bookings Content</div> // Replace with your component
+        element: <AdminBookings></AdminBookings>
+      },
+      {
+        path: 'reservation',
+        element: <Reservation></Reservation> 
       }
     ]
   }

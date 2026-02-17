@@ -1,11 +1,8 @@
-import { FaAd, FaBook, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch, FaShoppingCart, FaUsers, FaUtensils, FaChevronRight } from "react-icons/fa";
+import { FaAd, FaBook, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch, FaShoppingCart, FaUsers, FaUtensils,FaCalendarAlt, FaChevronRight } from "react-icons/fa";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import useCart from "../hooks/useCart";
 
-/**
- * NavItem: A reusable navigation component defined outside the render cycle.
- * This prevents React from recreating the component on every render.
- */
+
 const NavItem = ({ to, icon: Icon, label, badge }) => (
     <li className="mb-1">
         <NavLink
@@ -88,6 +85,7 @@ const Dashboard = () => {
                             <NavItem to="/dashboard/cart" icon={FaShoppingCart} label="My Cart" badge={cart?.length} />
                             <NavItem to="/dashboard/review" icon={FaAd} label="Add Review" />
                             <NavItem to="/dashboard/paymentHistory" icon={FaList} label="Payment History" />
+                            <NavItem to="/dashboard/myBookings" icon={FaCalendarAlt} label="My Bookings" />
                         </ul>
                     </div>
 

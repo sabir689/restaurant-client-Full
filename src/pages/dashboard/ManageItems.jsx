@@ -7,6 +7,7 @@ import useMenu from "../../hooks/UseMenu";
 
 const ManageItems = () => {
     const axiosSecure = useAxiosSecure();
+    // We only need refetch from the hook; menu/loading are handled locally for pagination
     const [, , refetch] = useMenu();
 
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -15,7 +16,7 @@ const ManageItems = () => {
     const [totalCount, setTotalCount] = useState(0);
     const [loading, setLoading] = useState(true);
 
-    // 1. Reusable fetch function
+    // 1. Fetch paginated data
     const fetchCurrentPage = useCallback(async () => {
         try {
             setLoading(true);
@@ -29,7 +30,7 @@ const ManageItems = () => {
         }
     }, [axiosSecure, currentPage, itemsPerPage]);
 
-    // 2. Load data on change
+    // 2. Load data on mount and when page/size changes
     useEffect(() => {
         fetchCurrentPage();
     }, [fetchCurrentPage]);
@@ -39,7 +40,7 @@ const ManageItems = () => {
         setCurrentPage(0);
     };
 
-    // 3. Optimized Delete Handler
+    // 3. Delete Handler
     const handleDeleteItem = async (item) => {
         const result = await Swal.fire({
             title: "Are you sure?",
@@ -57,11 +58,10 @@ const ManageItems = () => {
             const res = await axiosSecure.delete(`/menu/${item._id}`);
 
             if (res.data.deletedCount > 0) {
-                // SUCCESS: Update UI Instantly
+                // UI: Update locally first for instant feedback
                 setPaginatedMenu((prev) => prev.filter((i) => i._id !== item._id));
                 setTotalCount((prev) => prev - 1);
 
-                // Show Success Alert
                 Swal.fire({
                     title: "Deleted!",
                     icon: "success",
@@ -69,22 +69,23 @@ const ManageItems = () => {
                     timer: 1000
                 });
 
-                // Background Sync: Update global hook and refill page gap
-                refetch();
-                
+                // Sync: Update the global useMenu state
+                if (typeof refetch === 'function') {
+                    refetch();
+                }
+
+                // Logic: Handle page jumps or refills
                 if (paginatedMenu.length === 1 && currentPage > 0) {
                     setCurrentPage((prev) => prev - 1);
                 } else {
-                    // Small delay ensures DB is ready before we re-fetch the page list
                     setTimeout(() => {
-                        fetchCurrentPage().catch(() => {}); 
+                        fetchCurrentPage().catch(() => { });
                     }, 500);
                 }
             } else {
                 Swal.fire("Note", "Item could not be found.", "info");
             }
         } catch (error) {
-            // Only triggers if the Network/Server actually fails
             console.error("Delete error:", error);
             Swal.fire("Error!", "Failed to delete item from server.", "error");
         }
@@ -94,7 +95,7 @@ const ManageItems = () => {
     const pages = [...Array(numberOfPages).keys()];
 
     return (
-        <div className="w-full min-h-screen pb-10">
+        <div className="w-full min-h-screen pb-10 px-4 md:px-0">
             {/* Header */}
             <div className="mb-10">
                 <p className="text-[#B58130] font-bold tracking-[0.3em] uppercase text-xs mb-2">Inventory Control</p>
@@ -111,9 +112,9 @@ const ManageItems = () => {
                         <h3 className="text-xl font-bold text-gray-700 uppercase">Stock Overview</h3>
                         <p className="text-sm text-gray-400 font-medium">Total: {totalCount}</p>
                     </div>
-                    <select 
-                        value={itemsPerPage} 
-                        onChange={handleItemsPerPage} 
+                    <select
+                        value={itemsPerPage}
+                        onChange={handleItemsPerPage}
                         className="select select-bordered select-sm font-bold text-[#B58130]"
                     >
                         <option value="5">5</option>
@@ -136,7 +137,11 @@ const ManageItems = () => {
                         </thead>
                         <tbody>
                             {loading ? (
-                                <tr><td colSpan="5" className="text-center py-10"><span className="loading loading-spinner text-warning"></span></td></tr>
+                                <tr>
+                                    <td colSpan="5" className="text-center py-10">
+                                        <span className="loading loading-spinner text-warning"></span>
+                                    </td>
+                                </tr>
                             ) : (
                                 paginatedMenu.map((item, index) => (
                                     <tr key={item._id} className="hover:bg-gray-50 transition-all border-b border-gray-50">
@@ -153,15 +158,20 @@ const ManageItems = () => {
                                         </td>
                                         <td><span className="badge badge-ghost font-bold text-[10px] uppercase">{item.category}</span></td>
                                         <td className="font-bold text-gray-700">${item.price.toFixed(2)}</td>
-                                        <td className="flex justify-center gap-2">
+                                        <td className="flex justify-center items-center gap-3 py-4">
+                                            {/* Update Button */}
                                             <Link to={`/dashboard/updateItem/${item._id}`}>
-                                                <button className="btn btn-ghost btn-xs text-orange-400 border border-gray-100"><FaEdit /></button>
+                                                <button className="btn btn-md bg-orange-500 hover:bg-orange-600 text-white border-none shadow-md">
+                                                    <FaEdit className="text-lg" />
+                                                </button>
                                             </Link>
-                                            <button 
-                                                onClick={() => handleDeleteItem(item)} 
-                                                className="btn btn-ghost btn-xs text-red-400 border border-gray-100"
+
+                                            {/* Delete Button */}
+                                            <button
+                                                onClick={() => handleDeleteItem(item)}
+                                                className="btn btn-md bg-red-500 hover:bg-red-600 text-white border-none shadow-md"
                                             >
-                                                <FaTrashAlt />
+                                                <FaTrashAlt className="text-lg" />
                                             </button>
                                         </td>
                                     </tr>
@@ -171,32 +181,34 @@ const ManageItems = () => {
                     </table>
                 </div>
 
-                {/* Pagination */}
-                <div className="p-8 flex justify-center items-center gap-2 bg-gray-50/30">
-                    <button 
-                        disabled={currentPage === 0} 
-                        onClick={() => setCurrentPage(prev => prev - 1)} 
-                        className="btn btn-sm btn-ghost"
-                    >
-                        <FaChevronLeft />
-                    </button>
-                    {pages.map(page => (
-                        <button 
-                            key={page} 
-                            onClick={() => setCurrentPage(page)} 
-                            className={`w-8 h-8 rounded-lg text-xs font-bold ${currentPage === page ? 'bg-[#B58130] text-white shadow-md' : 'text-gray-400'}`}
+                {/* Pagination Controls */}
+                {numberOfPages > 0 && (
+                    <div className="p-8 flex justify-center items-center gap-2 bg-gray-50/30">
+                        <button
+                            disabled={currentPage === 0}
+                            onClick={() => setCurrentPage(prev => prev - 1)}
+                            className="btn btn-sm btn-ghost"
                         >
-                            {page + 1}
+                            <FaChevronLeft />
                         </button>
-                    ))}
-                    <button 
-                        disabled={currentPage === numberOfPages - 1} 
-                        onClick={() => setCurrentPage(prev => prev + 1)} 
-                        className="btn btn-sm btn-ghost"
-                    >
-                        <FaChevronRight />
-                    </button>
-                </div>
+                        {pages.map(page => (
+                            <button
+                                key={page}
+                                onClick={() => setCurrentPage(page)}
+                                className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${currentPage === page ? 'bg-[#B58130] text-white shadow-md' : 'text-gray-400 hover:bg-gray-200'}`}
+                            >
+                                {page + 1}
+                            </button>
+                        ))}
+                        <button
+                            disabled={currentPage === numberOfPages - 1}
+                            onClick={() => setCurrentPage(prev => prev + 1)}
+                            className="btn btn-sm btn-ghost"
+                        >
+                            <FaChevronRight />
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
