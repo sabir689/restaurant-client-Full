@@ -4,6 +4,7 @@ import { FaPhoneAlt, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 import SectionTitle from '../../components/SectionTitle';
 import Cover from '../menu/Cover';
 import contactImg from '../../assets/contact/banner.jpg';
+import { Helmet } from 'react-helmet-async';
 
 const Contact = () => {
     // Initialize React Hook Form
@@ -17,17 +18,21 @@ const Contact = () => {
     // Form submission handler
     const onSubmit = (data) => {
         console.log("Form Data:", data);
-        
+
         alert("Message sent successfully!");
-        reset(); 
+        reset();
     };
 
     return (
         <div >
-            <Cover  img={contactImg} title="Contact Us"></Cover>
+            <Cover img={contactImg} title="Contact Us"></Cover>
 
-            <div className=" mx-auto my-20 px-4">
-                {/* 1. Location Section */}
+            <div className=" mx-auto my-20 px-4 text-black">
+                <Helmet>
+                    <title>Bistro da unique | Contact</title>
+                    <meta name="description" content="Welcome to Bistro da unique Restaurant - The best food in town" />
+                </Helmet>
+
                 <SectionTitle heading="Visit Us" subHeading="OUR LOCATION" />
 
                 <div className="grid md:grid-cols-3 gap-6 mb-20">
@@ -74,13 +79,13 @@ const Contact = () => {
                             {/* Name Input */}
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text font-bold">Name*</span>
+                                    <span className="label-text font-bold">Name</span>
                                 </label>
                                 <input
                                     type="text"
                                     {...register("name", { required: "Name is required" })}
                                     placeholder="Enter your name"
-                                    className={`input input-bordered w-full py-8 ${errors.name ? 'border-red-500' : ''}`}
+                                    className={`input input-bordered bg-white w-full py-8 ${errors.name ? 'border-red-500' : ''}`}
                                 />
                                 {errors.name && <span className="text-red-500 text-sm mt-1">{errors.name.message}</span>}
                             </div>
@@ -88,11 +93,11 @@ const Contact = () => {
                             {/* Email Input */}
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text font-bold">Email*</span>
+                                    <span className="label-text font-bold">Email</span>
                                 </label>
                                 <input
                                     type="email"
-                                    {...register("email", { 
+                                    {...register("email", {
                                         required: "Email is required",
                                         pattern: {
                                             value: /^\S+@\S+$/i,
@@ -100,7 +105,7 @@ const Contact = () => {
                                         }
                                     })}
                                     placeholder="Enter your email"
-                                    className={`input input-bordered w-full py-8 ${errors.email ? 'border-red-500' : ''}`}
+                                    className={`input input-bordered bg-white w-full py-8 ${errors.email ? 'border-red-500' : ''}`}
                                 />
                                 {errors.email && <span className="text-red-500 text-sm mt-1">{errors.email.message}</span>}
                             </div>
@@ -109,13 +114,13 @@ const Contact = () => {
                         {/* Phone Input */}
                         <div className="form-control mt-6">
                             <label className="label">
-                                <span className="label-text font-bold">Phone*</span>
+                                <span className="label-text font-bold">Phone</span>
                             </label>
                             <input
                                 type="text"
                                 {...register("phone", { required: "Phone number is required" })}
                                 placeholder="Enter your phone number"
-                                className={`input input-bordered w-full py-8 ${errors.phone ? 'border-red-500' : ''}`}
+                                className={`input input-bordered bg-white w-full py-8 ${errors.phone ? 'border-red-500' : ''}`}
                             />
                             {errors.phone && <span className="text-red-500 text-sm mt-1">{errors.phone.message}</span>}
                         </div>
@@ -123,18 +128,18 @@ const Contact = () => {
                         {/* Message Textarea */}
                         <div className="form-control mt-6 ">
                             <label className="label">
-                                <span className="label-text font-bold">Message*</span>
+                                <span className="label-text font-bold">Message</span>
                             </label>
                             <textarea
                                 {...register("message", { required: "Message cannot be empty" })}
-                                className={`textarea textarea-bordered h-40 w-full  ${errors.message ? 'border-red-500' : ''}`}
+                                className={`textarea textarea-bordered h-40 w-full bg-white  ${errors.message ? 'border-red-500' : ''}`}
                                 placeholder="Write your message here"
                             ></textarea>
                             {errors.message && <span className="text-red-500 text-sm mt-1">{errors.message.message}</span>}
                         </div>
 
                         <div className="mt-8 text-center">
-                            <button 
+                            <button
                                 type="submit"
                                 className="btn bg-gradient-to-r from-[#835D23] to-[#B58130] text-white px-10 border-none hover:opacity-90 transition-opacity"
                             >

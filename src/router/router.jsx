@@ -10,6 +10,7 @@ import Contact from "../pages/contact/Contact";
 import Dashboard from "../layouts/Dashboard";
 import Cart from "../pages/dashboard/Cart";
 import PrivateRoute from "./PrivateRoute";
+import AdminRoute from "./AdminRoute"; // Imported Admin Guard
 import AllUsers from "../pages/dashboard/AllUser";
 import AdminHome from "../pages/dashboard/AdminHome";
 import AddItem from "../pages/dashboard/AddItems";
@@ -24,102 +25,102 @@ import Payment from "../pages/payment/Payment";
 import PaymentHistory from "../pages/payment/PaymentHistory";
 
 export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <RootLayout />, // Using element consistently
-    children: [
-      {
-        index: true,
-        element: <Home />
-      },
-      {
-        path: 'menu',
-        element: <Menu />
-      },
-      {
-        path: 'order/:category',
-        element: <Order />
-      },
-      {
-        path: 'contact',
-        element: <Contact />
-      },
-    ]
-  },
-  {
-    path: '/',
-    element: <AuthLayout />,
-    children: [
-      {
-        path: 'signIn',
-        element: <SignIn />
-      },
-      {
-        path: 'signUp',
-        element: <SignUp />
-      },
-    ]
-  },
-  {
-    path: 'dashboard',
-    element: <PrivateRoute><Dashboard /></PrivateRoute>,
-    children: [
-      // User Routes
-      {
-        path: 'cart',
-        element: <Cart />
-      },
-      {
-        path: 'payment',
-        element: <Payment />
-      },
-      {
-        path: 'paymentHistory',
-        element: <PaymentHistory />
-      },
+    {
+        path: "/",
+        element: <RootLayout />,
+        children: [
+            {
+                index: true,
+                element: <Home />
+            },
+            {
+                path: 'menu',
+                element: <Menu />
+            },
+            {
+                path: 'order/:category',
+                element: <Order />
+            },
+            {
+                path: 'contact',
+                element: <Contact />
+            },
+        ]
+    },
+    {
+        path: '/',
+        element: <AuthLayout />,
+        children: [
+            {
+                path: 'signIn',
+                element: <SignIn />
+            },
+            {
+                path: 'signUp',
+                element: <SignUp />
+            },
+        ]
+    },
+    {
+        path: 'dashboard',
+        element: <PrivateRoute><Dashboard /></PrivateRoute>,
+        children: [
+            // user
+            {
+                path: 'userHome',
+                element: <UserHome />
+            },
+            {
+                path: 'cart',
+                element: <Cart />
+            },
+            {
+                path: 'payment',
+                element: <Payment />
+            },
+            {
+                path: 'paymentHistory',
+                element: <PaymentHistory />
+            },
+            {
+                path: 'addReviews',
+                element: <AddReview />
+            },
+            {
+                path: 'myBookings',
+                element: <MyBookings />
+            },
+            {
+                path: 'reservation',
+                element: <Reservation />
+            },
 
-      // Admin Routes (Available to see for now as requested)
-      {
-        path: 'users',
-        element: <AllUsers />
-      },
-      {
-        path: 'adminHome',
-        element: <AdminHome></AdminHome>
-      },
-      {
-        path: 'userHome',
-        element: <UserHome></UserHome>
-      },
-      {
-        path: 'addReviews',
-        element: <AddReview></AddReview>
-      },
-      {
-        path: 'addItems',
-        element: <AddItem></AddItem>
-      },
-      {
-        path: 'manageItems',
-        element: <ManageItems></ManageItems>
-      },
-      {
-        path: "updateItem/:id",
-        element: <UpdateItem />,
-        loader: ({ params }) => fetch(`http://localhost:5000/menu/${params.id}`)
-      },
-      {
-        path: 'myBookings',
-        element: <MyBookings></MyBookings>
-      },
-      {
-        path: 'bookings',
-        element: <AdminBookings></AdminBookings>
-      },
-      {
-        path: 'reservation',
-        element: <Reservation></Reservation>
-      }
-    ]
-  }
+            // admin
+            {
+                path: 'adminHome',
+                element: <AdminRoute><AdminHome /></AdminRoute>
+            },
+            {
+                path: 'users',
+                element: <AdminRoute><AllUsers /></AdminRoute>
+            },
+            {
+                path: 'addItems',
+                element: <AdminRoute><AddItem /></AdminRoute>
+            },
+            {
+                path: 'manageItems',
+                element: <AdminRoute><ManageItems /></AdminRoute>
+            },
+            {
+                path: 'bookings',
+                element: <AdminRoute><AdminBookings /></AdminRoute>
+            },
+            {
+                path: "updateItem/:id",
+                element: <AdminRoute><UpdateItem /></AdminRoute>,
+                loader: ({ params }) => fetch(`https://restaurant-server-eta.vercel.app/menu/${params.id}`)
+            },
+        ]
+    }
 ]);

@@ -7,7 +7,7 @@ const useMenu = () => {
     // Define the fetch logic as a reusable function
     const refetch = useCallback(() => {
         setLoading(true);
-        fetch('http://localhost:5000/menu-all')
+        fetch('https://restaurant-server-eta.vercel.app/menu-all')
             .then(res => res.json())
             .then(data => {
                 setMenu(data);

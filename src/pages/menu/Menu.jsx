@@ -8,6 +8,7 @@ import dessertImg from '../../assets/menu/dessert-bg.jpeg'
 import SectionTitle from '../../components/SectionTitle';
 import MenuCategory from '../menu/MenuCategory';
 import useMenu from '../../hooks/UseMenu';
+import { Helmet } from 'react-helmet-async';
 
 
 const Menu = () => {
@@ -19,7 +20,10 @@ const Menu = () => {
     const offered = menu.filter(item => item.category === 'offered');
     return (
         <div >
-            
+            <Helmet>
+                            <title>Bistro da unique | Menu</title>
+                            <meta name="description" content="Welcome to Bistro da unique Restaurant - The best food in town" />
+                        </Helmet>
             <Cover img={menuImg} title="our menu"></Cover>
             {/* main cover */}
             <SectionTitle subHeading="Don't Miss" heading="Today's Offer"></SectionTitle>

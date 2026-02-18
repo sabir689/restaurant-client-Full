@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
 import { 
+    GoogleAuthProvider, 
     createUserWithEmailAndPassword, 
     onAuthStateChanged, 
     signInWithEmailAndPassword, 
+    signInWithPopup, 
     signOut, 
     updateProfile 
 } from "firebase/auth";
-// Import 'auth' directly from your init file
+import axios from "axios"; 
 import { auth } from "../firebase/Firebase.init"; 
 import { AuthContext } from "../context/AuthContext"; 
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const googleProvider = new GoogleAuthProvider();
 
     const createUser = (email, password) => {
         setLoading(true);
@@ -24,13 +27,17 @@ const AuthProvider = ({ children }) => {
         return signInWithEmailAndPassword(auth, email, password);
     };
 
+    const googleSignIn = () => {
+        setLoading(true);
+        return signInWithPopup(auth, googleProvider);
+    };
+
     const logOut = () => {
         setLoading(true);
         return signOut(auth);
     };
 
     const updateUserProfile = (name, photo) => {
-        // Use auth.currentUser directly
         return updateProfile(auth.currentUser, {
             displayName: name, 
             photoURL: photo
@@ -38,14 +45,32 @@ const AuthProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, currentUser => {
+        const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
             setUser(currentUser);
-            console.log('Current User Status:', currentUser);
-            setLoading(false);
+            
+            if (currentUser) {
+                // Get token and store in client side
+                const userInfo = { email: currentUser.email };
+                try {
+                    const res = await axios.post('https://restaurant-server-eta.vercel.app/jwt', userInfo);
+                    if (res.data.token) {
+                        localStorage.setItem('access-token', res.data.token);
+                        // We set loading to false ONLY after the token is saved
+                        setLoading(false);
+                    }
+                } catch (err) {
+                    console.error("JWT Error at AuthProvider:", err);
+                    localStorage.removeItem('access-token');
+                    setLoading(false);
+                }
+            } else {
+                // Remove token (if user logs out)
+                localStorage.removeItem('access-token');
+                setLoading(false);
+            }
         });
-        return () => {
-            unsubscribe();
-        };
+
+        return () => unsubscribe();
     }, []);
 
     const authInfo = {
@@ -53,6 +78,7 @@ const AuthProvider = ({ children }) => {
         loading,
         createUser,
         signIn,
+        googleSignIn,
         logOut,
         updateUserProfile
     };

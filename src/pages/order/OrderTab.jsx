@@ -6,6 +6,7 @@ import { Pagination } from "swiper/modules";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
+import { Helmet } from 'react-helmet-async';
 
 const OrderTab = ({ items }) => {
     const pagination = {
@@ -17,6 +18,10 @@ const OrderTab = ({ items }) => {
 
     return (
         <div>
+            <Helmet>
+                            <title>Bistro da unique | Order</title>
+                            <meta name="description" content="Welcome to Bistro da unique Restaurant - The best food in town" />
+                        </Helmet>
             <Swiper
                 pagination={pagination}
                 modules={[Pagination]}

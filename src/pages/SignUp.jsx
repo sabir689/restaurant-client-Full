@@ -1,25 +1,20 @@
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaFacebookF, FaGoogle, FaGithub } from 'react-icons/fa';
 import { Eye, EyeOff } from 'lucide-react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { Helmet } from 'react-helmet-async'; // Added Helmet
 import useAxiosPublic from '../hooks/useAxiosPublic';
 import { AuthContext } from '../context/AuthContext';
+import SocialLogin from './SocialLogin';
 
-const SocialIcon = ({ icon }) => (
-    <button type="button" className="p-3 border-2 border-gray-600 rounded-full text-gray-700 hover:bg-gray-700 hover:text-white transition-all">
-        {icon}
-    </button>
-);
 
 const SignUp = () => {
     const axiosPublic = useAxiosPublic();
     const { createUser, updateUserProfile } = useContext(AuthContext);
     const navigate = useNavigate();
     
-    // UI & Upload States
     const [profilePic, setProfilePic] = useState('');
     const [isUploading, setIsUploading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -31,7 +26,6 @@ const SignUp = () => {
         reset
     } = useForm();
 
-    // Image Upload Logic to ImgBB
     const handleImageUpload = async (e) => {
         const image = e.target.files[0];
         if (!image) return;
@@ -45,68 +39,74 @@ const SignUp = () => {
             const res = await axios.post(ImageUploadUrl, formData);
             if (res.data.success) {
                 setProfilePic(res.data.data.url);
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Image Uploaded!",
+                    showConfirmButton: false,
+                    timer: 1000,
+                    toast: true
+                });
             }
         } catch (error) {
-            console.error("Upload error", error);
-            Swal.fire("Upload Failed", "Could not upload image. Check your API key.", "error");
+            Swal.fire("Upload Failed", "Could not upload image.", error);
         } finally {
             setIsUploading(false);
         }
     };
 
     const onSubmit = async (data) => {
-        // Prevent submission if image is still uploading
         if (isUploading) return;
 
         try {
             // 1. Create User in Firebase
             await createUser(data.email, data.password);
             
-            // 2. Update Firebase Profile with Name and ImgBB URL
+            // 2. Update Firebase Profile
             await updateUserProfile(data.name, profilePic);
 
-            // 3. Prepare data for your MongoDB
+            // 3. Sync with MongoDB
             const userInfo = {
                 name: data.name,
                 email: data.email,
                 image: profilePic,
-                role: 'user', // Default role
+                role: 'user',
                 createdAt: new Date().toISOString()
             };
 
-            // 4. Sync with Backend Database
             const res = await axiosPublic.post('/users', userInfo);
             
             if (res.data.insertedId) {
                 reset();
                 Swal.fire({
-                    position: 'center',
                     icon: 'success',
-                    title: 'Account Created Successfully!',
+                    title: 'Account Created!',
+                    text: 'Welcome to Bistro Boss',
                     showConfirmButton: false,
                     timer: 1500
                 });
                 navigate('/');
             }
         } catch (error) {
-            console.error("Auth Error:", error);
             Swal.fire({
                 icon: 'error',
                 title: 'Registration Error',
-                text: error.message || "Something went wrong. Please try again.",
+                text: error.message,
             });
         }
     };
 
     return (
-        <div className="w-full max-w-md mx-auto py-10 px-4">
+        <div className="w-full max-w-md  bg-amber-100 mx-auto py-10 px-6   rounded-2xl my-10">
+            <Helmet>
+                <title>Bistro da unique | Sign Up</title>
+            </Helmet>
             
-            
-            <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">Sign Up</h2>
+            <h2 className="text-3xl font-bold text-center mb-8 text-gray-800 uppercase font-cinzel">Sign Up</h2>
 
             {/* Avatar Preview */}
             <div className="mb-6 flex justify-center">
-                <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-[#D2B48C] relative overflow-hidden shadow-sm">
+                <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center border-2 border-[#D2B48C] relative overflow-hidden shadow-sm">
                     {profilePic ? (
                         <img src={profilePic} alt="Preview" className="w-full h-full object-cover" />
                     ) : (
@@ -123,30 +123,30 @@ const SignUp = () => {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                {/* Profile Picture Field */}
+                {/* Profile Picture */}
                 <div>
                     <label className="block text-sm font-bold text-gray-700 mb-1">Profile Picture</label>
                     <input
                         type="file"
                         accept="image/*"
                         onChange={handleImageUpload}
-                        className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#D2B48C] file:text-white hover:file:bg-[#BFA37C] cursor-pointer"
+                        className="w-full text-sm text-gray-500 bg-white file:mr-4 file:py-2 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-[#D2B48C] file:text-white hover:file:bg-[#BFA37C] cursor-pointer"
                     />
                 </div>
 
-                {/* Name Field */}
+                {/* Name */}
                 <div>
                     <label className="block text-sm font-bold text-gray-700 mb-1">Name</label>
                     <input
                         type="text"
                         placeholder="Your Name"
                         {...register("name", { required: "Name is required" })}
-                        className={`w-full text-black px-4 py-3 border rounded-md outline-none focus:ring-1 focus:ring-amber-500 bg-white ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
+                        className="w-full bg-white text-black px-4 py-3 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-[#D2B48C]"
                     />
                     {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
                 </div>
 
-                {/* Email Field */}
+                {/* Email */}
                 <div>
                     <label className="block text-sm font-bold text-gray-700 mb-1">Email</label>
                     <input
@@ -156,12 +156,12 @@ const SignUp = () => {
                             required: "Email is required",
                             pattern: { value: /^\S+@\S+$/i, message: "Invalid email format" }
                         })}
-                        className={`w-full text-black px-4 py-3 border rounded-md outline-none focus:ring-1 focus:ring-amber-500 bg-white ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+                        className="w-full bg-white text-black px-4 py-3 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-[#D2B48C]"
                     />
                     {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
                 </div>
 
-                {/* Password Field with Eye Toggle */}
+                {/* Password */}
                 <div>
                     <label className="block text-sm font-bold text-gray-700 mb-1">Password</label>
                     <div className="relative">
@@ -176,12 +176,12 @@ const SignUp = () => {
                                     message: "Must include Uppercase, Lowercase, Number & Special Character"
                                 }
                             })}
-                            className={`w-full text-black px-4 py-3 border rounded-md outline-none focus:ring-1 focus:ring-amber-500 bg-white pr-10 ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
+                            className="w-full bg-white text-black px-4 py-3 border border-gray-300 rounded-md outline-none focus:ring-2 focus:ring-[#D2B48C] pr-10"
                         />
                         <button 
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-[#BFA37C]"
+                            className="absolute inset-y-0 right-3 flex items-center text-gray-400"
                         >
                             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                         </button>
@@ -189,26 +189,20 @@ const SignUp = () => {
                     {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
                 </div>
 
-                {/* Submit Button */}
                 <button
                     type="submit"
                     disabled={isUploading}
-                    className="w-full bg-[#D2B48C] hover:bg-[#BFA37C] text-white font-bold py-3 rounded-md shadow-md transition-all active:scale-95 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    className="w-full bg-[#D2B48C] hover:bg-[#BFA37C] text-white font-bold py-3 rounded-md shadow-md transition-all active:scale-95 disabled:bg-gray-400"
                 >
                     {isUploading ? "Uploading Image..." : "Sign Up"}
                 </button>
             </form>
 
-            <div className="mt-6 text-center space-y-4">
-                <p className="text-[#D2B48C] font-semibold text-sm">
-                    Already registered? <Link to="/login" className="font-bold hover:underline text-[#8B6F47]">Go to log in</Link>
+            <div className="mt-6 text-center">
+                <p className="text-[#D2B48C] text-sm mb-4">
+                    Already registered? <Link to="/signIn" className="font-bold hover:underline">Go to log in</Link>
                 </p>
-                <p className="text-gray-400 text-sm">Or sign up with</p>
-                <div className="flex justify-center gap-4">
-                    <SocialIcon icon={<FaFacebookF />} />
-                    <SocialIcon icon={<FaGoogle />} />
-                    <SocialIcon icon={<FaGithub />} />
-                </div>
+                <SocialLogin />
             </div>
         </div>
     );

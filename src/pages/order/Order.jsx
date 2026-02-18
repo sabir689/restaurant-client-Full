@@ -40,7 +40,7 @@ const Order = () => {
 
                     </TabList>
                 </div>
-                <div className='mx-10 my-20 '>
+                <div className='mx-10 my-20 text-center '>
                     <TabPanel>
                         <OrderTab items={salad}></OrderTab>
                     </TabPanel>

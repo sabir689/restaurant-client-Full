@@ -6,10 +6,15 @@ import PopularMenu from './PopularMenu';
 import Featured from './Featured';
 import ChefRecommends from './ChefRecommends';
 import Testimonials from '../Testimonial';
+import { Helmet } from 'react-helmet-async';
 
 const Home = () => {
     return (
         <div >
+            <Helmet>
+                <title>Bistro da unique | Home</title>
+                <meta name="description" content="Welcome to Bistro da unique Restaurant - The best food in town" />
+            </Helmet>
             
             <Banner></Banner>
             <Category></Category>
