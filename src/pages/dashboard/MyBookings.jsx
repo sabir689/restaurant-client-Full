@@ -47,7 +47,7 @@ const MyBookings = () => {
             <header className="mb-16 text-center">
                 <span className="text-[#B58130] font-bold tracking-[0.4em] uppercase text-xs">Guest Portal</span>
                 <h1 className="text-5xl font-extrabold mt-2 font-cinzel tracking-tight">
-                    MY <span className="text-[#B58130]">RESERVATIONS</span>
+                    MY <span className="text-[#B58130]">RESERVATION</span>
                 </h1>
                 <div className="h-1 w-24 bg-[#B58130] mx-auto mt-4 rounded-full"></div>
             </header>

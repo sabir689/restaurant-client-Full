@@ -1,12 +1,11 @@
 import FoodCard from '../order/FoodCard';
 import { Swiper, SwiperSlide } from "swiper/react";
-// Change this line:
 import { Pagination } from "swiper/modules"; 
+import { Helmet } from 'react-helmet-async';
 
-// Import Swiper styles
+
 import "swiper/css";
 import "swiper/css/pagination";
-import { Helmet } from 'react-helmet-async';
 
 const OrderTab = ({ items }) => {
     const pagination = {
@@ -17,18 +16,19 @@ const OrderTab = ({ items }) => {
     };
 
     return (
-        <div>
+        <div className="w-full">
             <Helmet>
-                            <title>Bistro da unique | Order</title>
-                            <meta name="description" content="Welcome to Bistro da unique Restaurant - The best food in town" />
-                        </Helmet>
+                <title>Bistro Boss | Order</title>
+            </Helmet>
+            
             <Swiper
                 pagination={pagination}
                 modules={[Pagination]}
-                className="mySwiper"
+                className="mySwiper pb-12" 
             >
                 <SwiperSlide>
-                    <div className='grid md:grid-cols-3 gap-10'>
+                   
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 justify-items-center'>
                         {
                             items.map(item => <FoodCard
                                 key={item._id}

@@ -9,9 +9,12 @@ import { useParams } from 'react-router';
 
 
 const Order = () => {
-    const categories = ['salad', 'pizza', 'soup', 'dessert', 'drinks', 'offered', 'popular'];
+    // 1. Keep this consistent!
+    const categories = ['popular', 'offered', 'salad', 'pizza', 'soup', 'dessert', 'drinks'];
     const { category } = useParams();
-    const initialIndex = categories.indexOf(category);
+    
+    // indexof will return -1 if category is undefined, so we default to 0
+    const initialIndex = categories.indexOf(category) > -1 ? categories.indexOf(category) : 0;
     const [tabIndex, setTabIndex] = useState(initialIndex);
     const [menu] = useMenu();
 
@@ -25,11 +28,12 @@ const Order = () => {
 
     return (
         <div>
-
-            <Cover img={orderCoverImg} title="Order Food"></Cover>
-            <Tabs defaultIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
-                <div className='flex justify-center m-10  '>
-                    <TabList>
+            <Cover img={orderCoverImg} title="Order Food" />
+            
+            {/* onSelect ensures the state updates when you click a tab */}
+            <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
+                <div className='flex justify-center my-10'>
+                    <TabList className="border-b-2 border-yellow-500">
                         <Tab>Popular</Tab>
                         <Tab>Offered</Tab>
                         <Tab>Salad</Tab>
@@ -37,35 +41,21 @@ const Order = () => {
                         <Tab>Soup</Tab>
                         <Tab>Dessert</Tab>
                         <Tab>Drinks</Tab>
-
                     </TabList>
                 </div>
-                <div className='mx-10 my-20 text-center '>
-                    <TabPanel>
-                        <OrderTab items={salad}></OrderTab>
-                    </TabPanel>
-                    <TabPanel>
-                        <OrderTab items={pizza}></OrderTab>
-                    </TabPanel>
-                    <TabPanel>
-                        <OrderTab items={soup}></OrderTab>
-                    </TabPanel>
-                    <TabPanel>
-                        <OrderTab items={desserts}></OrderTab>
-                    </TabPanel>
-                    <TabPanel>
-                        <OrderTab items={drinks}></OrderTab>
-                    </TabPanel>
-                    <TabPanel>
-                        <OrderTab items={offered}></OrderTab>
-                    </TabPanel>
-                    <TabPanel>
-                        <OrderTab items={popular}></OrderTab>
-                    </TabPanel>
+
+                <div className='max-w-7xl mx-auto px-4 my-20'>
+                    {/* PANELS MUST MATCH TAB ORDER ABOVE */}
+                    <TabPanel><OrderTab items={popular} /></TabPanel>
+                    <TabPanel><OrderTab items={offered} /></TabPanel>
+                    <TabPanel><OrderTab items={salad} /></TabPanel>
+                    <TabPanel><OrderTab items={pizza} /></TabPanel>
+                    <TabPanel><OrderTab items={soup} /></TabPanel>
+                    <TabPanel><OrderTab items={desserts} /></TabPanel>
+                    <TabPanel><OrderTab items={drinks} /></TabPanel>
                 </div>
             </Tabs>
         </div>
     );
 };
-
 export default Order;

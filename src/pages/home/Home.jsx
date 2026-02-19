@@ -16,7 +16,9 @@ const Home = () => {
                 <meta name="description" content="Welcome to Bistro da unique Restaurant - The best food in town" />
             </Helmet>
             
-            <Banner></Banner>
+           <div className='mt-20'>
+             <Banner></Banner>
+           </div>
             <Category></Category>
             <ChefService></ChefService>
             <PopularMenu></PopularMenu>
